@@ -8,6 +8,7 @@ import argparse
 import sys
 import os
 import urllib
+import humanize
 
 LogDestBase = "/vagrant/project/flaskapp/logs1"
 
@@ -60,6 +61,7 @@ def createDir(caseNumber):
 
 # if "amazonaws" is in the salesforce comment
 def processLogs(text, caseNumber):
+    downloadURL = text[24:]
     if "\n\n" not in text[24:] and len(text[24:]) < 220:
         firstfilename = text[24:].split('/')[-1].split('#')[0].split('?')[0]
         if not os.path.exists("{}/{}/{}/{}".format(LogDestBase, caseNumber, firstfilename[:-4], firstfilename)):
@@ -69,16 +71,23 @@ def processLogs(text, caseNumber):
                     if not os.path.exists("{}/{}/{}".format(LogDestBase, caseNumber, firstfilename[:-4])):
                         os.makedirs("{}/{}/{}".format(LogDestBase, caseNumber, firstfilename[:-4]))
                     # download full .zip file path to newly created directory
+                    printDLSize(downloadURL)
                     urllib.urlretrieve(text[24:], os.path.join("{}/{}/{}".format(LogDestBase, caseNumber, firstfilename[:-4]), firstfilename))
                     os.system("unzip -o -q {}/{}/{}/{} -d {}/{}/{}".format(LogDestBase, caseNumber, firstfilename[:-4], firstfilename, LogDestBase, caseNumber, firstfilename[:-4]))
                 else:
-                    # else if not .zip, download other type of file and don't try to extract it. 
+                    # else if not .zip, download other type of file and don't try to extract it.
                     if not os.path.exists("{}/{}/{}".format(LogDestBase, caseNumber, firstfilename)):
+                        printDLSize(downloadURL)
                         urllib.urlretrieve(text[24:], os.path.join("{}/{}".format(LogDestBase, caseNumber), firstfilename))
             except:
                 print "ERROR: Executing {} failed.".format(caseNumber)
                 # cancel execution so not try to unzip if this download fails?
                 # delete the
+
+def printDLSize(downloadURL):
+    openDL = urllib.urlopen("%s" % downloadURL)
+    print "Currently downloading from S3: ", humanize.naturalsize((openDL.info()['Content-Length']))
+
 
 def downloadFTP(caseNumber, ftpAddress):
     from ftplib import FTP
@@ -104,6 +113,7 @@ def downloadFTP(caseNumber, ftpAddress):
                 local_filename = os.path.join(ftpTargetDir, filename)
                 if not os.path.exists(local_filename):
                     file = open(local_filename, 'wb')
+                    "Currently downloading from FTP"
                     ftp.retrbinary('RETR '+ filename, file.write)
                     file.close()
                     # extract if .zip ?
@@ -112,7 +122,7 @@ def downloadFTP(caseNumber, ftpAddress):
             # ftp is empty
             pass
     except:
-        print "Exception: Problem connecting to FTP."
+        print "Exception: Problem connecting to FTP for %s." % caseNumber
         pass
 
 
