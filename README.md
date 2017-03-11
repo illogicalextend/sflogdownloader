@@ -1,11 +1,15 @@
 # sflogdownloader
 
-Using salesforce api, download all Cases (including correspondence) owned by particular people and parse the output for aws links to download and extract attachments (log files) in to newly created directories.
+Using Salesforce API, examine all Cases (including correspondence) owned by particular people and parse the output for Amazon S3 and FTP links to download and extract attachments (log files) in to newly created directories.
 
-Script expects presence of file called "credentials.txt" at same level formatted like:
+To run:
 
-"
-example@user
-examplePassword
-exampleSalesForceAPIKey
-"
+Clone repository. 
+
+Populate "credentials.txt" with your Salesforce Username, Password and Security Token. 
+
+Modify downloader.py to include your desired log destination under "LogDestBase" and your Salesforce Owner ID under "sfOwnerId". 
+
+Run "pip install -r requirements.txt"
+
+Run "python downloader.py"
