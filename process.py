@@ -1,5 +1,3 @@
-
-
 from download import ftp
 from download import s3
 import os
@@ -9,8 +7,8 @@ def createDir(caseNumber, LogDestBase):
     if not os.path.exists("{}/{}".format(LogDestBase, caseNumber)):
         os.makedirs("{}/{}".format(LogDestBase, caseNumber))
 
-def getData(sf, LogDestBase):
-    records = getcases.getSalesforceCases(LogDestBase)
+def getData(sf, LogDestBase, sfOwnerId):
+    records = getcases.getSalesforceCases(LogDestBase, sfOwnerId)
     print "Destination: {}".format(LogDestBase)
     for i in range(0, len(records)):
         caseNumber = records[i]['CaseNumber']
