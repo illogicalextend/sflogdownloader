@@ -7,7 +7,8 @@ import os
 # destination for log downloads
 LogDestBase = "/vagrant/project/flaskapp/logs1"
 
-# salesforce user owner id. To return multiple, set to "OwnerId = 'x' or OwnerId = 'y'"
+# salesforce user owner id. To return multiple,
+# set to "OwnerId = 'x' or OwnerId = 'y'"
 sfOwnerId = "00532000004yymVAAQ"
 
 def createLogDir():
