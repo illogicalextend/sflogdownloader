@@ -1,6 +1,3 @@
-
-
-
 from simple_salesforce import Salesforce
 
 def authSalesforce():
