@@ -14,7 +14,16 @@ def getData(sf, LogDestBase, sfOwnerId):
         caseNumber = records[i]['CaseNumber']
 
         ftpLogLocation = records[i]['LogLocationFTPURL__c']
-        caseDetailResult = sf.query("SELECT Status,ToAddress,TextBody,CreatedDate,FromAddress,FromName,HasAttachment,Headers,Id,Incoming,IsDeleted,LastModifiedById,LastModifiedDate,MessageDate,ParentId,ReplyToEmailMessageId,Subject,SystemModstamp FROM EmailMessage where ParentId in (SELECT Id FROM Case where Case_External_ID__c = '{}')".format(records[i]['Case_External_ID__c']))
+        caseDetailResult = sf.query("SELECT Status,ToAddress,TextBody, \
+                                    CreatedDate,FromAddress,FromName, \
+                                    HasAttachment,Headers,Id,Incoming, \
+                                    IsDeleted,LastModifiedById, \
+                                    LastModifiedDate,MessageDate,ParentId, \
+                                    ReplyToEmailMessageId,Subject, \
+                                    SystemModstamp FROM EmailMessage where \
+                                    ParentId in (SELECT Id FROM Case where \
+                                    Case_External_ID__c = '{}')".format \
+                                    (records[i]['Case_External_ID__c']))
         caseDetailResult = caseDetailResult['records']
 
         print "Processing", caseNumber
