@@ -34,10 +34,10 @@ def createDir(caseNumber, LogDestBase):
 def getCasesContent(sf, LogDestBase, sfOwnerId):
     records = getSalesforceCases(LogDestBase, sfOwnerId)
     print "Destination: {}".format(LogDestBase)
-    for i in range(0, len(records)):
-        caseNumber = records[i]['CaseNumber']
+    for record in records:
+        caseNumber = record['CaseNumber']
 
-        ftpLogLocation = records[i]['LogLocationFTPURL__c']
+        ftpLogLocation = record['LogLocationFTPURL__c']
         caseDetailResult = sf.query("SELECT Status,ToAddress,TextBody, \
                                     CreatedDate,FromAddress,FromName, \
                                     HasAttachment,Headers,Id,Incoming, \
@@ -47,7 +47,7 @@ def getCasesContent(sf, LogDestBase, sfOwnerId):
                                     SystemModstamp FROM EmailMessage where \
                                     ParentId in (SELECT Id FROM Case where \
                                     Case_External_ID__c = '{}')".format \
-                                    (records[i]['Case_External_ID__c']))
+                                    (record['Case_External_ID__c']))
         caseDetailResult = caseDetailResult['records']
 
         print "Processing", caseNumber
