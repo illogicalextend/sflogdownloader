@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from process import getData
-from auth import authSalesforce
+from process import getCasesContent
+from process import authSalesforce
 import os
 
 # destination for log downloads
