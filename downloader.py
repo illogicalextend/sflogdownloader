@@ -19,4 +19,4 @@ def createLogDir():
 if __name__ == "__main__":
     sf = authSalesforce()
     createLogDir()
-    getData(sf, LogDestBase, sfOwnerId)
+    getCasesContent(sf, LogDestBase, sfOwnerId)

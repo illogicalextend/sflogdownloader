@@ -7,7 +7,7 @@ def createDir(caseNumber, LogDestBase):
     if not os.path.exists("{}/{}".format(LogDestBase, caseNumber)):
         os.makedirs("{}/{}".format(LogDestBase, caseNumber))
 
-def getData(sf, LogDestBase, sfOwnerId):
+def getCasesContent(sf, LogDestBase, sfOwnerId):
     records = getcases.getSalesforceCases(LogDestBase, sfOwnerId)
     print "Destination: {}".format(LogDestBase)
     for i in range(0, len(records)):
@@ -27,8 +27,11 @@ def getData(sf, LogDestBase, sfOwnerId):
         caseDetailResult = caseDetailResult['records']
 
         print "Processing", caseNumber
+        # check if FTP exists:
         if ftpLogLocation is not None and len(ftpLogLocation) < 60:
             ftp.downloadFTP(caseNumber, ftpLogLocation, LogDestBase)
+
+        # check if AWS S3 files exist:
         for i in caseDetailResult:
             text = i.items()[3][1]
             if text is None:
