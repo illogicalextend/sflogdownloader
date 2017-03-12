@@ -1,14 +1,38 @@
 from download import ftp
 from download import s3
 import os
-import getcases
+
+from simple_salesforce import Salesforce
+
+def authSalesforce():
+    with open('credentials.txt') as f:
+        lines = f.read().splitlines()
+        sfUsername = lines[0]
+        sfPassword = lines[1]
+        sfToken = lines[2]
+        sf = Salesforce(username='%s' % sfUsername, password='%s' % sfPassword,
+            security_token='%s' % sfToken)
+        return sf
+
+def getSalesforceCases(LogDestBase, sfOwnerId):
+     print "Destination: {}".format(LogDestBase)
+     print "Checking for available logs.."
+     caseListResult = "SELECT CaseNumber, Status, Case_External_ID__c, \
+        LogLocationFTPURL__c FROM Case where (Status != 'closed' and \
+        Status != 'Closed No Response' and Status != 'Merged' and \
+        Status != 'Junk' and Status != 'Closed by Customer' and \
+        Status != 'Closed In KB' and Status != 'Call No-Answer') and \
+        (OwnerId = '%s') ORDER BY CaseNumber ASC" % sfOwnerId
+     query = authSalesforce().query(caseListResult)
+     records = query['records']
+     return records
 
 def createDir(caseNumber, LogDestBase):
     if not os.path.exists("{}/{}".format(LogDestBase, caseNumber)):
         os.makedirs("{}/{}".format(LogDestBase, caseNumber))
 
 def getCasesContent(sf, LogDestBase, sfOwnerId):
-    records = getcases.getSalesforceCases(LogDestBase, sfOwnerId)
+    records = getSalesforceCases(LogDestBase, sfOwnerId)
     print "Destination: {}".format(LogDestBase)
     for i in range(0, len(records)):
         caseNumber = records[i]['CaseNumber']
