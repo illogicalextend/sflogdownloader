@@ -2,6 +2,7 @@
 
 from process import getCasesContent
 from process import authSalesforce
+from process import logRetention
 import os
 
 # destination for log downloads
@@ -10,6 +11,9 @@ LogDestBase = "/vagrant/project/flaskapp/logs1"
 # salesforce user owner id. To return multiple,
 # set to "OwnerId = 'x' or OwnerId = 'y'"
 sfOwnerId = "00532000004yymVAAQ"
+
+# number of days to store logs before deleting them.
+savedFilesRetention = 18
 
 def createLogDir():
     if not os.path.exists(LogDestBase):
@@ -20,3 +24,4 @@ if __name__ == "__main__":
     sf = authSalesforce()
     createLogDir()
     getCasesContent(sf, LogDestBase, sfOwnerId)
+    logRetention(LogDestBase, savedFilesRetention)

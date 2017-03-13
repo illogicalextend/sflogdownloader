@@ -1,6 +1,5 @@
-from download import ftp
-from download import s3
-import os
+import download
+import os, time
 
 from simple_salesforce import Salesforce
 
@@ -15,7 +14,6 @@ def authSalesforce():
         return sf
 
 def getSalesforceCases(LogDestBase, sfOwnerId):
-     print "Destination: {}".format(LogDestBase)
      print "Checking for available logs.."
      caseListResult = "SELECT CaseNumber, Status, Case_External_ID__c, \
         LogLocationFTPURL__c FROM Case where (Status != 'closed' and \
@@ -53,7 +51,7 @@ def getCasesContent(sf, LogDestBase, sfOwnerId):
         print "Processing", caseNumber
         # check if FTP exists:
         if ftpLogLocation is not None and len(ftpLogLocation) < 60:
-            ftp.downloadFTP(caseNumber, ftpLogLocation, LogDestBase)
+            download.downloadFTP(caseNumber, ftpLogLocation, LogDestBase)
 
         # check if AWS S3 files exist:
         for i in caseDetailResult:
@@ -64,10 +62,27 @@ def getCasesContent(sf, LogDestBase, sfOwnerId):
             else:
                 if "amazonaws" in text:
                     createDir(caseNumber, LogDestBase)
-                    s3.downloadS3(text, caseNumber, LogDestBase)
+                    download.downloadS3(text, caseNumber, LogDestBase)
                 else:
                     ###    print "OVER 220: ", text.encode('cp1252')
                     splitting = text.split("\n\n")
                     for listItem in splitting:
                         if "amazonaws" in listItem:
-                            s3.downloadS3(text, caseNumber, LogDestBase)
+                            download.downloadS3(text, caseNumber, LogDestBase)
+
+
+def logRetention(LogDestBase, savedFilesRetention):
+    print "Applying saved files retention.."
+    deleteCount = 0
+    for file in os.listdir(LogDestBase):
+        now = time.time()
+        fullFilePath = os.path.join(LogDestBase, file)
+        if os.stat(fullFilePath).st_mtime <  now - savedFilesRetention * 86400:
+            if os.path.exists(fullFilePath):
+                print "Removing path: ", fullFilePath
+                os.system("rm -rf {}".format(fullFilePath))
+                deleteCount = deleteCount + 1
+    if deleteCount < 1:
+        print "Retention complete. No files deleted."
+    else:
+        print "Retention complete. {} files deleted.".format(deleteCount)
