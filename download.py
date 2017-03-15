@@ -46,6 +46,8 @@ def downloadS3(text, caseNumber, LogDestBase):
                 # cancel execution so not try to unzip if this download fails?
 
 
+
+
 def downloadFTP(caseNumber, ftpAddress, LogDestBase):
     from ftplib import FTP
 
@@ -53,7 +55,6 @@ def downloadFTP(caseNumber, ftpAddress, LogDestBase):
 
     firstSplit = ftpAddress.split(":")
     ftpUsername = firstSplit[1][2:]
-    # print caseNumber + " potentially problematic FTP split: ", firstSplit[2]
     secondSplit = firstSplit[2].split("@")
     ftpPassword = secondSplit[0]
     ftpDomain = secondSplit[1]
@@ -63,9 +64,8 @@ def downloadFTP(caseNumber, ftpAddress, LogDestBase):
         ftp.login(ftpUsername, ftpPassword)
         filenames = ftp.nlst() # get filenames within the ftp directory
 
+        # parse_ftp(caseNumber, LogDestBase, ftp.nlst())
         if filenames:
-            if not os.path.exists("{}/{}/FTP".format(LogDestBase, caseNumber)):
-                os.makedirs("{}/{}/FTP".format(LogDestBase, caseNumber))
             for filename in filenames:
                 local_filename = os.path.join(ftpTargetDir, filename)
                 if not os.path.exists(local_filename):
