@@ -13,7 +13,7 @@ LogDestBase = "/vagrant/project/flaskapp/logs1"
 sfOwnerId = "00532000004yymVAAQ"
 
 # number of days to store logs before deleting them.
-savedFilesRetention = 18
+savedFilesRetention = 40
 
 def createLogDir():
     if not os.path.exists(LogDestBase):

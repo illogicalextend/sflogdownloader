@@ -25,9 +25,9 @@ def getSalesforceCases(LogDestBase, sfOwnerId):
      records = query['records']
      return records
 
-def createDir(caseNumber, LogDestBase):
-    if not os.path.exists("{}/{}".format(LogDestBase, caseNumber)):
-        os.makedirs("{}/{}".format(LogDestBase, caseNumber))
+def createDir(dir):
+    if not os.path.exists(dir):
+        os.makedirs(dir)
 
 def getCasesContent(sf, LogDestBase, sfOwnerId):
     records = getSalesforceCases(LogDestBase, sfOwnerId)
@@ -51,6 +51,7 @@ def getCasesContent(sf, LogDestBase, sfOwnerId):
         print "Processing", caseNumber
         # check if FTP exists:
         if ftpLogLocation is not None and len(ftpLogLocation) < 60:
+            createDir("/{}/{}/FTP".format(LogDestBase, caseNumber))
             download.downloadFTP(caseNumber, ftpLogLocation, LogDestBase)
 
         # check if AWS S3 files exist:
@@ -61,7 +62,7 @@ def getCasesContent(sf, LogDestBase, sfOwnerId):
                 # fail silently
             else:
                 if "amazonaws" in text:
-                    createDir(caseNumber, LogDestBase)
+                    createDir("/{}/{}".format(caseNumber, LogDestBase))
                     download.downloadS3(text, caseNumber, LogDestBase)
                 else:
                     ###    print "OVER 220: ", text.encode('cp1252')
