@@ -8,10 +8,7 @@ def printDLSize(downloadURL):
         humanize.naturalsize((openDL.info()['Content-Length']))
 
 # if "amazonaws" is in the salesforce comment
-def downloadS3(recordText, caseNumber, LogDestBase):
-    downloadURL = recordText[24:]
-    if "\n\n" not in recordText[24:] and len(recordText[24:]) < 220:
-        firstfilename = recordText[24:].split('/')[-1].split('#')[0].split('?')[0]
+def downloadS3(recordText, caseNumber, LogDestBase, downloadURL):
         caseNumberPath = "{}/{}/{}".format \
             (LogDestBase, caseNumber, firstfilename[:-4])
         if not os.path.exists("{}/{}/{}/{}".format(LogDestBase, caseNumber,

@@ -1,6 +1,5 @@
 import download
 import os, time
-
 from simple_salesforce import Salesforce
 
 def authSalesforce():
@@ -63,7 +62,12 @@ def get_process_case(sf, LogDestBase, sfOwnerId):
             else:
                 if "amazonaws" in recordText:
                     createDir("/{}/{}".format(caseNumber, LogDestBase))
-                    download.downloadS3(recordText, caseNumber, LogDestBase)
+                    downloadURL = recordText[24:]
+                    if "\n\n" not in recordText[24:] and len(recordText[24:]) < 220:
+                        firstfilename = recordText[24:].split('/')[-1].split('#')[0].split('?')[0]
+                        caseNumberPath = "{}/{}/{}".format \
+                            (LogDestBase, caseNumber, firstfilename[:-4])
+                    download.downloadS3(recordText, caseNumber, LogDestBase, downloadURL)
                 else:
                     splitting = recordText.split("\n\n")
                     for listItem in splitting:
