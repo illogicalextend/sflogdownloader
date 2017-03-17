@@ -2,6 +2,9 @@ import download
 import os, time
 from simple_salesforce import Salesforce
 
+RECORD_PREFIX = 24
+# Record with S3 begins with "Customer's attachments". Truncate it to get URL.
+
 def authSalesforce():
     with open('credentials.txt') as f:
         lines = f.read().splitlines()
@@ -62,9 +65,9 @@ def get_process_case(sf, LogDestBase, sfOwnerId):
             else:
                 if "amazonaws" in recordText:
                     createDir("/{}/{}".format(caseNumber, LogDestBase))
-                    downloadURL = recordText[24:]
-                    if "\n\n" not in recordText[24:] and len(recordText[24:]) < 220:
-                        firstfilename = recordText[24:].split('/')[-1].split('#')[0].split('?')[0]
+                    downloadURL = recordText[RECORD_PREFIX:]
+                    if "\n\n" not in recordText[RECORD_PREFIX:] and len(recordText[RECORD_PREFIX:]) < 220:
+                        firstfilename = recordText[RECORD_PREFIX:].split('/')[-1].split('#')[0].split('?')[0]
                         caseNumberPath = "{}/{}/{}".format \
                             (LogDestBase, caseNumber, firstfilename[:-4])
                     download.downloadS3(recordText, caseNumber, LogDestBase, downloadURL)
