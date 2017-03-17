@@ -46,7 +46,7 @@ def get_process_case(sf, LogDestBase, sfOwnerId):
                                     ParentId in (SELECT Id FROM Case where \
                                     Case_External_ID__c = '{}')".format \
                                     (record['Case_External_ID__c']))
-        caseDetailResult = caseDetailResult['records']
+        caseDetailResult = caseDetailRecords['records']
 
         print "Processing", caseNumber
         # check if FTP exists:
@@ -55,21 +55,20 @@ def get_process_case(sf, LogDestBase, sfOwnerId):
             download.downloadFTP(caseNumber, ftpLogLocation, LogDestBase)
 
         # check if AWS S3 files exist:
-        for i in caseDetailResult:
-            text = i.items()[3][1]
-            if text is None:
+        for record in caseDetailRecords:
+            recordText = record.items()[3][1]
+            if recordText is None:
                 pass
-                # fail silently
+                # Empty message in Salesforce.
             else:
-                if "amazonaws" in text:
+                if "amazonaws" in recordText:
                     createDir("/{}/{}".format(caseNumber, LogDestBase))
-                    download.downloadS3(text, caseNumber, LogDestBase)
+                    download.downloadS3(recordText, caseNumber, LogDestBase)
                 else:
-                    ###    print "OVER 220: ", text.encode('cp1252')
-                    splitting = text.split("\n\n")
+                    splitting = recordText.split("\n\n")
                     for listItem in splitting:
                         if "amazonaws" in listItem:
-                            download.downloadS3(text, caseNumber, LogDestBase)
+                            download.downloadS3(recordText, caseNumber, LogDestBase)
 
 
 def logRetention(LogDestBase, savedFilesRetention):

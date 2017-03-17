@@ -8,10 +8,10 @@ def printDLSize(downloadURL):
         humanize.naturalsize((openDL.info()['Content-Length']))
 
 # if "amazonaws" is in the salesforce comment
-def downloadS3(text, caseNumber, LogDestBase):
-    downloadURL = text[24:]
-    if "\n\n" not in text[24:] and len(text[24:]) < 220:
-        firstfilename = text[24:].split('/')[-1].split('#')[0].split('?')[0]
+def downloadS3(recordText, caseNumber, LogDestBase):
+    downloadURL = recordText[24:]
+    if "\n\n" not in recordText[24:] and len(recordText[24:]) < 220:
+        firstfilename = recordText[24:].split('/')[-1].split('#')[0].split('?')[0]
         caseNumberPath = "{}/{}/{}".format \
             (LogDestBase, caseNumber, firstfilename[:-4])
         if not os.path.exists("{}/{}/{}/{}".format(LogDestBase, caseNumber,
@@ -24,7 +24,7 @@ def downloadS3(text, caseNumber, LogDestBase):
                         os.makedirs(caseNumberPath)
                     # download full .zip file path to newly created directory
                     printDLSize(downloadURL)
-                    urllib.urlretrieve(text[24:], \
+                    urllib.urlretrieve(recordText[24:], \
                                        os.path.join("{}/{}". \
                                                     format(caseNumberPath,
                                                            firstfilename)))
@@ -38,7 +38,7 @@ def downloadS3(text, caseNumber, LogDestBase):
                                                             caseNumber,
                                                             firstfilename)):
                         printDLSize(downloadURL)
-                        urllib.urlretrieve(text[24:], os.path.join("{}/{}". \
+                        urllib.urlretrieve(recordText[24:], os.path.join("{}/{}". \
                             format(LogDestBase, caseNumber), firstfilename))
             except Exception as e:
                 print "ERROR: Executing {} failed.".format(caseNumber)
