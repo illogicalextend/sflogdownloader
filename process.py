@@ -29,7 +29,7 @@ def createDir(dir):
     if not os.path.exists(dir):
         os.makedirs(dir)
 
-def getCasesContent(sf, LogDestBase, sfOwnerId):
+def get_process_case(sf, LogDestBase, sfOwnerId):
     records = getSalesforceCases(LogDestBase, sfOwnerId)
     print "Destination: {}".format(LogDestBase)
     for record in records:

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from process import getCasesContent
+from process import get_process_case
 from process import authSalesforce
 from process import logRetention
 import os
@@ -23,5 +23,5 @@ def createLogDir():
 if __name__ == "__main__":
     sf = authSalesforce()
     createLogDir()
-    getCasesContent(sf, LogDestBase, sfOwnerId)
+    get_process_case(sf, LogDestBase, sfOwnerId)
     logRetention(LogDestBase, savedFilesRetention)
