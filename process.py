@@ -51,7 +51,7 @@ def get_process_case(sf, LogDestBase, sfOwnerId):
                                     ParentId in (SELECT Id FROM Case where \
                                     Case_External_ID__c = '{}')".format \
                                     (record['Case_External_ID__c']))
-        caseDetailResult = caseDetailRecords['records']
+        caseDetailRecords = caseDetailResult['records']
 
         print "Processing", caseNumber
         # check if FTP exists:
@@ -71,7 +71,7 @@ def get_process_case(sf, LogDestBase, sfOwnerId):
                     downloadURL = recordText[RECORD_PREFIX:]
                     if "\n\n" not in recordText[RECORD_PREFIX:] and len(recordText[RECORD_PREFIX:]) < RECORD_MAX:
                         firstfilename = recordText[RECORD_PREFIX:].split('/')[-1].split('#')[0].split('?')[0]
-                    download.downloadS3(recordText, caseNumber, LogDestBase, downloadURL)
+                    download.downloadS3(recordText, caseNumber, LogDestBase, downloadURL, firstfilename)
                 else:
                     splitting = recordText.split("\n\n")
                     for listItem in splitting:
