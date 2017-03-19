@@ -2,6 +2,9 @@ import os
 import urllib
 import humanize
 
+ZIP_LENGTH = -4
+# Represent char count of string ".zip". If ends in this, it's a zip file
+
 def printDLSize(downloadURL):
     openDL = urllib.urlopen("%s" % downloadURL)
     print "Currently downloading from S3: ", \
@@ -10,11 +13,11 @@ def printDLSize(downloadURL):
 # if "amazonaws" is in the salesforce comment
 def downloadS3(recordText, caseNumber, LogDestBase, downloadURL):
         caseNumberPath = "{}/{}/{}".format \
-            (LogDestBase, caseNumber, firstfilename[:-4])
+            (LogDestBase, caseNumber, firstfilename[:ZIP_LENGTH])
         if not os.path.exists("{}/{}/{}/{}".format(LogDestBase, caseNumber,
-            firstfilename[:-4], firstfilename)):
+            firstfilename[:ZIP_LENGTH], firstfilename)):
             try:
-                if firstfilename[-4:] == ".zip":
+                if firstfilename[ZIP_LENGTH:] == ".zip":
                     # create directory (if doesn't exist) to store contents of
                     # zip, by trimming ".zip" and naming dir after filename
                     if not os.path.exists(caseNumberPath):

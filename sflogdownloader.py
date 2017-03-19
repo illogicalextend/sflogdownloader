@@ -13,6 +13,7 @@ LogDestBase = "/vagrant/project/flaskapp/logs1"
 sfOwnerId = "00532000004yymVAAQ"
 
 # number of days to store logs before deleting them.
+retainLogs = True
 savedFilesRetention = 40
 
 def createLogDir():
@@ -24,4 +25,5 @@ if __name__ == "__main__":
     sf = authSalesforce()
     createLogDir()
     get_process_case(sf, LogDestBase, sfOwnerId)
-    logRetention(LogDestBase, savedFilesRetention)
+    if retainLogs is True:
+        logRetention(LogDestBase, savedFilesRetention)
