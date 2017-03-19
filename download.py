@@ -16,7 +16,7 @@ def downloadS3(recordText, caseNumber, LogDestBase, downloadURL):
             try:
                 if firstfilename[-4:] == ".zip":
                     # create directory (if doesn't exist) to store contents of
-                    #zip, by trimming ".zip" and naming directory after filename
+                    # zip, by trimming ".zip" and naming dir after filename
                     if not os.path.exists(caseNumberPath):
                         os.makedirs(caseNumberPath)
                     # download full .zip file path to newly created directory

@@ -4,6 +4,9 @@ from simple_salesforce import Salesforce
 
 RECORD_PREFIX = 24
 # Record with S3 begins with "Customer's attachments". Truncate it to get URL.
+RECORD_MAX = 220
+# Arbritrary guess at max S3 URL char length. Negate mention of "amazonaws" \
+# in a long comment that isn't a hyperlink.
 
 def authSalesforce():
     with open('credentials.txt') as f:
@@ -66,7 +69,7 @@ def get_process_case(sf, LogDestBase, sfOwnerId):
                 if "amazonaws" in recordText:
                     createDir("/{}/{}".format(caseNumber, LogDestBase))
                     downloadURL = recordText[RECORD_PREFIX:]
-                    if "\n\n" not in recordText[RECORD_PREFIX:] and len(recordText[RECORD_PREFIX:]) < 220:
+                    if "\n\n" not in recordText[RECORD_PREFIX:] and len(recordText[RECORD_PREFIX:]) < RECORD_MAX:
                         firstfilename = recordText[RECORD_PREFIX:].split('/')[-1].split('#')[0].split('?')[0]
                         caseNumberPath = "{}/{}/{}".format \
                             (LogDestBase, caseNumber, firstfilename[:-4])
