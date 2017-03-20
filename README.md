@@ -8,7 +8,7 @@ Clone repository.
 
 Populate `credentials.txt` with your Salesforce Username, Password and Security Token.
 
-Modify downloader.py to include your desired log destination under "LogDestBase" and your Salesforce Owner ID under "sfOwnerId".
+Modify `sflogdownloader.py` to include your desired log destination under "LogDestBase" and your Salesforce Owner ID under "sfOwnerId".
 
 Run `pip install -r requirements.txt` (also make sure "unzip" server utility is installed)
 
