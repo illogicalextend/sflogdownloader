@@ -1,5 +1,7 @@
 # sflogdownloader
 
+Script is written in Python 2! Not yet supported if you run with Python 3.
+
 Using Salesforce API, examine all Cases (including correspondence) owned by particular people and parse the output for Amazon S3 and FTP links to download and extract attachments (log files) in to newly created directories.
 
 To run:
@@ -10,6 +12,6 @@ Populate `credentials.txt` with your Salesforce Username, Password and Security 
 
 Modify `sflogdownloader.py` to include your desired log destination under "LogDestBase" and your Salesforce Owner ID under "sfOwnerId".
 
-Run `pip install -r requirements.txt` (also make sure "unzip" server utility is installed)
+Run `pip install -r requirements.txt` (also make sure "unzip" server utility is installed). 
 
 Run `python sflogdownloader.py`
