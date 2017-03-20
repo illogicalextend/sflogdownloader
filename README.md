@@ -12,4 +12,4 @@ Modify `sflogdownloader.py` to include your desired log destination under "LogDe
 
 Run `pip install -r requirements.txt` (also make sure "unzip" server utility is installed)
 
-Run `python downloader.py`
+Run `python sflogdownloader.py`
