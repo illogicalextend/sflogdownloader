@@ -67,7 +67,7 @@ def get_process_case(sf, LogDestBase, sfOwnerId):
                 # Indicates empty message in Salesforce.
             else:
                 if "amazonaws" in recordText:
-                    createDir("/{}/{}".format(caseNumber, LogDestBase))
+                    createDir("/{}/{}".format(LogDestBase, caseNumber))
                     downloadURL = recordText[RECORD_PREFIX:]
                     if "\n\n" not in recordText[RECORD_PREFIX:] and len(recordText[RECORD_PREFIX:]) < RECORD_MAX:
                         firstfilename = recordText[RECORD_PREFIX:].split('/')[-1].split('#')[0].split('?')[0]
